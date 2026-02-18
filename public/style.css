@@ -39,6 +39,8 @@ html, body {
   width: 36px;
   height: 36px;
   flex-shrink: 0;
+  border-radius: 50%;
+  object-fit: cover;
 }
 
 #header h1 {
