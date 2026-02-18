@@ -70,9 +70,8 @@ async function sendMessage(query) {
       return;
     }
 
-    // Replace loading bubble with empty AI message
-    loadingBubble.innerHTML = '';
     let fullText = '';
+    let loadingCleared = false;
 
     const reader = res.body.getReader();
     const decoder = new TextDecoder();
@@ -102,6 +101,10 @@ async function sendMessage(query) {
           }
 
           if (data.answer !== undefined) {
+            if (!loadingCleared) {
+              loadingBubble.innerHTML = '';
+              loadingCleared = true;
+            }
             fullText += data.answer;
             loadingBubble.textContent = fullText;
             scrollToBottom();
@@ -122,6 +125,10 @@ async function sendMessage(query) {
             conversationId = data.conversation_id;
           }
           if (data.answer !== undefined) {
+            if (!loadingCleared) {
+              loadingBubble.innerHTML = '';
+              loadingCleared = true;
+            }
             fullText += data.answer;
             loadingBubble.textContent = fullText;
             scrollToBottom();
