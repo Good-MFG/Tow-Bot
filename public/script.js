@@ -46,6 +46,9 @@ function setInputEnabled(enabled) {
 async function sendMessage(query) {
   if (!query.trim() || isStreaming) return;
 
+  const welcome = document.getElementById('welcome');
+  if (welcome) welcome.remove();
+
   addMessage(query, 'user');
   input.value = '';
   setInputEnabled(false);
