@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Widget Demo — Good MFG</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #f9fafb; color: #1a1a1a; }
+    header { background: #111; color: #fff; padding: 20px 32px; }
+    header h1 { font-size: 22px; }
+    nav { background: #fff; border-bottom: 1px solid #e5e7eb; padding: 12px 32px; display: flex; gap: 24px; }
+    nav a { text-decoration: none; color: #2563EB; font-size: 15px; }
+    main { max-width: 900px; margin: 40px auto; padding: 0 24px; }
+    main h2 { font-size: 28px; margin-bottom: 16px; }
+    main p { font-size: 16px; line-height: 1.7; color: #374151; margin-bottom: 16px; }
+    .card { background: #fff; border-radius: 12px; padding: 24px; box-shadow: 0 1px 3px rgba(0,0,0,0.08); margin-bottom: 24px; }
+    footer { text-align: center; padding: 32px; color: #9ca3af; font-size: 14px; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Good MFG</h1>
+  </header>
+  <nav>
+    <a href="#">Home</a>
+    <a href="#">Products</a>
+    <a href="#">About</a>
+    <a href="#">Contact</a>
+  </nav>
+  <main>
+    <div class="card">
+      <h2>Welcome to Good MFG</h2>
+      <p>This is a demo page simulating your WordPress site. The floating chat widget is in the bottom-right corner. Click the blue button to open the Tow Bot chat.</p>
+      <p>The chat loads in an iframe pointing to the same Vercel deployment. On your real WordPress site, you just paste the widget script and it works the same way.</p>
+    </div>
+    <div class="card">
+      <h2>Our Products</h2>
+      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris.</p>
+      <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident.</p>
+    </div>
+    <div class="card">
+      <h2>About Us</h2>
+      <p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis.</p>
+    </div>
+  </main>
+  <footer>© 2026 Good MFG. All rights reserved.</footer>
+
+  <!-- Floating Chat Widget -->
+  <style>
+    #chat-widget-btn {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      width: 60px;
+      height: 60px;
+      background: linear-gradient(135deg, #2563EB, #1d4ed8);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      z-index: 9999;
+      box-shadow: 0 4px 16px rgba(37, 99, 235, 0.4);
+      transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.25s ease;
+    }
+    #chat-widget-btn:hover {
+      transform: scale(1.1);
+      box-shadow: 0 6px 24px rgba(37, 99, 235, 0.5);
+    }
+    #chat-widget-btn svg {
+      width: 28px;
+      height: 28px;
+      color: #fff;
+      transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.2s ease;
+    }
+    #chat-widget-btn.open svg.icon-chat { transform: rotate(90deg) scale(0); opacity: 0; }
+    #chat-widget-btn.open svg.icon-close { transform: rotate(0deg) scale(1); opacity: 1; }
+    #chat-widget-btn svg.icon-close { position: absolute; transform: rotate(-90deg) scale(0); opacity: 0; }
+
+    #chat-widget-frame {
+      position: fixed;
+      bottom: 96px;
+      right: 24px;
+      width: 400px;
+      height: 600px;
+      border: none;
+      border-radius: 16px;
+      box-shadow: 0 12px 48px rgba(0, 0, 0, 0.18), 0 0 0 1px rgba(0, 0, 0, 0.05);
+      z-index: 9999;
+      opacity: 0;
+      transform: translateY(16px) scale(0.96);
+      pointer-events: none;
+      transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                  transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    #chat-widget-frame.open {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+      pointer-events: auto;
+    }
+
+    #chat-widget-greeting {
+      position: fixed;
+      bottom: 96px;
+      right: 24px;
+      background: #fff;
+      color: #1a1a1a;
+      padding: 10px 16px;
+      border-radius: 12px;
+      border-bottom-right-radius: 4px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.12), 0 0 0 1px rgba(0, 0, 0, 0.04);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      font-size: 14px;
+      line-height: 1.4;
+      z-index: 9998;
+      opacity: 0;
+      transform: translateY(8px);
+      pointer-events: none;
+      transition: opacity 0.3s ease, transform 0.3s ease;
+      white-space: nowrap;
+    }
+    #chat-widget-greeting.show {
+      opacity: 1;
+      transform: translateY(0);
+      pointer-events: auto;
+    }
+    #chat-widget-greeting .greeting-close {
+      position: absolute;
+      top: -8px;
+      right: -8px;
+      width: 20px;
+      height: 20px;
+      background: #fff;
+      border: 1px solid #e5e7eb;
+      border-radius: 50%;
+      color: #9ca3af;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+    }
+    #chat-widget-greeting .greeting-close svg {
+      width: 10px;
+      height: 10px;
+    }
+    #chat-widget-greeting .greeting-close:hover {
+      color: #374151;
+      border-color: #d1d5db;
+    }
+
+    @media (max-width: 480px) {
+      #chat-widget-frame, #chat-widget-frame.open {
+        width: calc(100vw - 16px);
+        height: calc(100vh - 140px);
+        right: 8px;
+        bottom: 88px;
+        border-radius: 12px;
+      }
+    }
+  </style>
+
+  <script>
+  (function() {
+    var isOpen = false;
+
+    var btn = document.createElement('div');
+    btn.id = 'chat-widget-btn';
+    btn.innerHTML = '<svg class="icon-chat" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg><svg class="icon-close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>';
+
+    var frame = document.createElement('iframe');
+    frame.id = 'chat-widget-frame';
+    frame.src = 'index.html';
+
+    var greeting = document.createElement('div');
+    greeting.id = 'chat-widget-greeting';
+    greeting.innerHTML = 'Chat with Tow Bot<button class="greeting-close"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>';
+
+    function dismissGreeting() {
+      greeting.classList.remove('show');
+    }
+
+    greeting.querySelector('.greeting-close').onclick = function(e) {
+      e.stopPropagation();
+      dismissGreeting();
+    };
+
+    greeting.onclick = function() {
+      dismissGreeting();
+      isOpen = true;
+      btn.classList.add('open');
+      frame.classList.add('open');
+    };
+
+    btn.onclick = function() {
+      isOpen = !isOpen;
+      btn.classList.toggle('open', isOpen);
+      frame.classList.toggle('open', isOpen);
+      if (isOpen) dismissGreeting();
+    };
+
+    document.body.appendChild(frame);
+    document.body.appendChild(greeting);
+    document.body.appendChild(btn);
+
+    setTimeout(function() {
+      if (!isOpen) greeting.classList.add('show');
+    }, 2000);
+  })();
+  </script>
+</body>
+</html>
