@@ -154,10 +154,15 @@
     @media (max-width: 480px) {
       #chat-widget-frame, #chat-widget-frame.open {
         width: calc(100vw - 16px);
-        height: calc(100vh - 140px);
+        height: calc(100dvh - 100px) !important;
         right: 8px;
         bottom: 88px;
+        top: auto;
         border-radius: 12px;
+      }
+      #chat-widget-greeting {
+        right: 16px;
+        bottom: 88px;
       }
     }
   </style>
