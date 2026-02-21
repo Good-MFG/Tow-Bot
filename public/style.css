@@ -67,7 +67,60 @@ html, body {
   font-size: 15px;
   line-height: 1.5;
   word-wrap: break-word;
-  white-space: pre-wrap;
+}
+
+.message.ai p {
+  margin: 0;
+}
+
+.message.ai p + p {
+  margin-top: 8px;
+}
+
+.message.ai strong {
+  font-weight: 600;
+}
+
+.message.ai h2, .message.ai h3, .message.ai h4 {
+  margin: 8px 0 4px;
+  font-weight: 600;
+}
+
+.message.ai h2 { font-size: 17px; }
+.message.ai h3 { font-size: 16px; }
+.message.ai h4 { font-size: 15px; }
+
+.message.ai ul, .message.ai ol {
+  margin: 6px 0;
+  padding-left: 20px;
+}
+
+.message.ai li {
+  margin: 2px 0;
+}
+
+.message.ai code {
+  background: rgba(0, 0, 0, 0.06);
+  padding: 1px 5px;
+  border-radius: 4px;
+  font-size: 13px;
+  font-family: "SF Mono", Menlo, Consolas, monospace;
+}
+
+.message.ai pre {
+  background: #1e1e1e;
+  color: #d4d4d4;
+  padding: 10px 12px;
+  border-radius: 8px;
+  overflow-x: auto;
+  margin: 6px 0;
+}
+
+.message.ai pre code {
+  background: none;
+  padding: 0;
+  font-size: 13px;
+  color: inherit;
 }
 
 .message.user {
@@ -75,6 +128,7 @@ html, body {
   background: #2563EB;
   color: #fff;
   border-bottom-right-radius: 4px;
+  white-space: pre-wrap;
 }
 
 .message.ai {
