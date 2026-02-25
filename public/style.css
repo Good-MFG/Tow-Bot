@@ -125,7 +125,7 @@ html, body {
 
 .message.user {
   align-self: flex-end;
-  background: #2563EB;
+  background: #09843B;
   color: #fff;
   border-bottom-right-radius: 4px;
   white-space: pre-wrap;
@@ -213,7 +213,7 @@ html, body {
 }
 
 #user-input:focus {
-  border-color: #2563EB;
+  border-color: #09843B;
 }
 
 #user-input:disabled {
@@ -226,7 +226,7 @@ html, body {
   height: 40px;
   border: none;
   border-radius: 50%;
-  background: #2563EB;
+  background: #09843B;
   color: #fff;
   cursor: pointer;
   display: flex;
@@ -237,11 +237,11 @@ html, body {
 }
 
 #send-btn:hover {
-  background: #1d4ed8;
+  background: #076b2f;
 }
 
 #send-btn:disabled {
-  background: #93c5fd;
+  background: #7bbf9a;
   cursor: not-allowed;
 }
 
