@@ -48,171 +48,275 @@
 
   <!-- Floating Chat Widget -->
   <style>
-    #chat-widget-btn {
-      position: fixed;
-      bottom: 24px;
-      right: 24px;
-      width: 60px;
-      height: 60px;
-      background: linear-gradient(135deg, #2563EB, #1d4ed8);
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      z-index: 9999;
-      box-shadow: 0 4px 16px rgba(37, 99, 235, 0.4);
-      transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.25s ease;
-    }
-    #chat-widget-btn:hover {
-      transform: scale(1.1);
-      box-shadow: 0 6px 24px rgba(37, 99, 235, 0.5);
-    }
-    #chat-widget-btn svg {
-      width: 28px;
-      height: 28px;
-      color: #fff;
-      transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.2s ease;
-    }
-    #chat-widget-btn.open svg.icon-chat { transform: rotate(90deg) scale(0); opacity: 0; }
-    #chat-widget-btn.open svg.icon-close { transform: rotate(0deg) scale(1); opacity: 1; }
-    #chat-widget-btn svg.icon-close { position: absolute; transform: rotate(-90deg) scale(0); opacity: 0; }
+  /* --- 1. 聊天主按钮 --- */
+  #chat-widget-btn {
+    position: fixed; bottom: 24px; right: 24px; width: 60px; height: 60px;
+    background: linear-gradient(135deg, #2563EB, #1d4ed8); border-radius: 50%;
+    display: flex; align-items: center; justify-content: center; cursor: pointer;
+    z-index: 2147483647; box-shadow: 0 4px 16px rgba(37, 99, 235, 0.4);
+    transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.25s ease;
+  }
+  #chat-widget-btn:hover { transform: scale(1.1); box-shadow: 0 6px 24px rgba(37, 99, 235, 0.5); }
+  #chat-widget-btn svg { width: 28px; height: 28px; color: #fff; transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.2s ease; }
+  #chat-widget-btn.open svg.icon-chat { transform: rotate(90deg) scale(0); opacity: 0; }
+  #chat-widget-btn.open svg.icon-close { transform: rotate(0deg) scale(1); opacity: 1; }
+  #chat-widget-btn svg.icon-close { position: absolute; transform: rotate(-90deg) scale(0); opacity: 0; }
 
-    #chat-widget-frame {
-      position: fixed;
-      bottom: 96px;
-      right: 24px;
-      width: 400px;
-      height: 600px;
-      border: none;
-      border-radius: 16px;
-      box-shadow: 0 12px 48px rgba(0, 0, 0, 0.18), 0 0 0 1px rgba(0, 0, 0, 0.05);
-      z-index: 9999;
-      opacity: 0;
-      transform: translateY(16px) scale(0.96);
-      pointer-events: none;
-      transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1),
-                  transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-    #chat-widget-frame.open {
-      opacity: 1;
-      transform: translateY(0) scale(1);
-      pointer-events: auto;
-    }
+  /* --- 2. 聊天窗口容器 --- */
+  #chat-widget-container {
+    position: fixed;
+    bottom: 96px;
+    right: 24px;
+    /* 默认宽高，会被 JS 覆盖 */
+    width: 400px;
+    height: 600px;
+    min-width: 300px;  /* 最小宽度限制 */
+    min-height: 400px; /* 最小高度限制 */
+    max-width: calc(100vw - 48px);
+    max-height: calc(100vh - 120px);
+    z-index: 2147483647;
+    opacity: 0;
+    transform: translateY(16px) scale(0.96);
+    pointer-events: none;
+    transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+                transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 12px 48px rgba(0, 0, 0, 0.18), 0 0 0 1px rgba(0, 0, 0, 0.05);
+    border-radius: 16px;
+    background: #fff;
+  }
+  /* 只有在非拖拽状态下才启用过渡动画，否则拖拽会卡顿 */
+  #chat-widget-container.open { opacity: 1; transform: translateY(0) scale(1); pointer-events: auto; }
+  #chat-widget-container.resizing { transition: none !important; pointer-events: auto; opacity: 1; transform: none; }
 
-    #chat-widget-greeting {
-      position: fixed;
-      bottom: 96px;
-      right: 24px;
-      background: #fff;
-      color: #1a1a1a;
-      padding: 10px 16px;
-      border-radius: 12px;
-      border-bottom-right-radius: 4px;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.12), 0 0 0 1px rgba(0, 0, 0, 0.04);
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-      font-size: 14px;
-      line-height: 1.4;
-      z-index: 9998;
-      opacity: 0;
-      transform: translateY(8px);
-      pointer-events: none;
-      transition: opacity 0.3s ease, transform 0.3s ease;
-      white-space: nowrap;
-    }
-    #chat-widget-greeting.show {
-      opacity: 1;
-      transform: translateY(0);
-      pointer-events: auto;
-    }
-    #chat-widget-greeting .greeting-close {
-      position: absolute;
-      top: -8px;
-      right: -8px;
-      width: 20px;
-      height: 20px;
-      background: #fff;
-      border: 1px solid #e5e7eb;
-      border-radius: 50%;
-      color: #9ca3af;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 0;
-      box-shadow: 0 1px 4px rgba(0,0,0,0.08);
-    }
-    #chat-widget-greeting .greeting-close svg {
-      width: 10px;
-      height: 10px;
-    }
-    #chat-widget-greeting .greeting-close:hover {
-      color: #374151;
-      border-color: #d1d5db;
-    }
+  /* iframe */
+  #chat-widget-frame {
+    width: 100%; height: 100%; flex: 1; border: none; border-radius: 16px;
+  }
 
-    @media (max-width: 480px) {
-      #chat-widget-frame, #chat-widget-frame.open {
-        width: calc(100vw - 16px);
-        height: calc(100dvh - 100px) !important;
-        right: 8px;
-        bottom: 88px;
-        top: auto;
-        border-radius: 12px;
-      }
-      #chat-widget-greeting {
-        right: 16px;
-        bottom: 88px;
-      }
+  /* --- 3. 右上角关闭按钮 --- */
+  #chat-widget-close-top {
+    position: absolute; top: -12px; right: -12px; width: 32px; height: 32px;
+    background: #fff; border: 1px solid #e5e7eb; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center; cursor: pointer;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1); color: #6b7280; z-index: 2;
+  }
+  #chat-widget-close-top:hover { background: #f3f4f6; color: #111; transform: scale(1.1); }
+  #chat-widget-close-top svg { width: 16px; height: 16px; }
+
+  /* --- 4. 左上角调整大小手柄 (Resize Handle) --- */
+  #chat-widget-resize-handle {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 24px;
+    height: 24px;
+    cursor: nwse-resize; /* 鼠标样式：左上-右下箭头 */
+    z-index: 10;
+    background: transparent;
+  }
+  /* 加一个小角标提示用户这里可以拖拽 */
+  #chat-widget-resize-handle::after {
+    content: ''; position: absolute; top: 6px; left: 6px;
+    width: 8px; height: 8px;
+    border-top: 2px solid #cbd5e1;
+    border-left: 2px solid #cbd5e1;
+    border-top-left-radius: 2px;
+    transition: border-color 0.2s;
+  }
+  #chat-widget-resize-handle:hover::after { border-color: #2563EB; }
+
+  /* --- 5. 覆盖层 (拖拽时防止iframe捕获鼠标) --- */
+  #chat-widget-overlay {
+    display: none; position: absolute; top: 0; left: 0; right: 0; bottom: 0; z-index: 1;
+  }
+  #chat-widget-container.resizing #chat-widget-overlay { display: block; }
+
+  /* --- 6. 问候语 --- */
+  #chat-widget-greeting {
+    position: fixed; bottom: 96px; right: 24px; background: #fff; color: #1a1a1a;
+    padding: 10px 16px; border-radius: 12px; border-bottom-right-radius: 4px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.12), 0 0 0 1px rgba(0, 0, 0, 0.04);
+    font-family: system-ui, -apple-system, sans-serif; font-size: 14px; line-height: 1.4;
+    z-index: 2147483646; opacity: 0; transform: translateY(8px); pointer-events: none;
+    transition: opacity 0.3s ease, transform 0.3s ease; white-space: nowrap;
+  }
+  #chat-widget-greeting.show { opacity: 1; transform: translateY(0); pointer-events: auto; }
+  #chat-widget-greeting .greeting-close {
+    position: absolute; top: -8px; right: -8px; width: 20px; height: 20px;
+    background: #fff; border: 1px solid #e5e7eb; border-radius: 50%; color: #9ca3af;
+    cursor: pointer; display: flex; align-items: center; justify-content: center;
+    padding: 0; box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+  }
+  #chat-widget-greeting .greeting-close svg { width: 10px; height: 10px; }
+
+  @media (max-width: 480px) {
+    #chat-widget-container {
+      width: calc(100vw - 32px) !important; height: calc(100dvh - 120px) !important;
+      right: 16px; bottom: 96px; max-width: none; max-height: none;
     }
+    #chat-widget-resize-handle { display: none; } /* 手机端禁止调整大小 */
+  }
   </style>
 
   <script>
   (function() {
-    var isOpen = false;
+    var TARGET_URL = 'index.html'; // local demo; use 'https://tow-bot.vercel.app/' in production
+    var STORAGE_KEY_WIDTH  = 'tow_bot_width';
+    var STORAGE_KEY_HEIGHT = 'tow_bot_height';
+    var STORAGE_KEY_CONV   = 'tow_bot_conversation_id'; // stored on parent page (1st-party)
+    var STORAGE_KEY_USER   = 'tow_bot_user_id';          // stored on parent page (1st-party)
 
-    var btn = document.createElement('div');
-    btn.id = 'chat-widget-btn';
-    btn.innerHTML = '<svg class="icon-chat" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg><svg class="icon-close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>';
-
-    var frame = document.createElement('iframe');
-    frame.id = 'chat-widget-frame';
-    frame.src = 'index.html';
-
-    var greeting = document.createElement('div');
-    greeting.id = 'chat-widget-greeting';
-    greeting.innerHTML = 'Chat with Tow Bot<button class="greeting-close"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>';
-
-    function dismissGreeting() {
-      greeting.classList.remove('show');
+    // Build iframe URL with session params so the bot can resume the conversation
+    function getOrCreateUserId() {
+      var id = localStorage.getItem(STORAGE_KEY_USER);
+      if (!id) {
+        id = 'user_' + Math.random().toString(36).substring(2, 15);
+        localStorage.setItem(STORAGE_KEY_USER, id);
+      }
+      return id;
     }
 
-    greeting.querySelector('.greeting-close').onclick = function(e) {
-      e.stopPropagation();
-      dismissGreeting();
-    };
+    function buildIframeSrc() {
+      var uid = getOrCreateUserId();
+      var cid = localStorage.getItem(STORAGE_KEY_CONV) || '';
+      var url = TARGET_URL + '?uid=' + encodeURIComponent(uid);
+      if (cid) url += '&cid=' + encodeURIComponent(cid);
+      return url;
+    }
 
-    greeting.onclick = function() {
-      dismissGreeting();
-      isOpen = true;
-      btn.classList.add('open');
-      frame.classList.add('open');
-    };
+    function createWidget() {
+      if (document.getElementById('chat-widget-btn')) return;
 
-    btn.onclick = function() {
-      isOpen = !isOpen;
-      btn.classList.toggle('open', isOpen);
-      frame.classList.toggle('open', isOpen);
-      if (isOpen) dismissGreeting();
-    };
+      var isOpen = false;
 
-    document.body.appendChild(frame);
-    document.body.appendChild(greeting);
-    document.body.appendChild(btn);
+      // 恢复用户上次设置的大小
+      var savedWidth = localStorage.getItem(STORAGE_KEY_WIDTH) || '400px';
+      var savedHeight = localStorage.getItem(STORAGE_KEY_HEIGHT) || '600px';
 
-    setTimeout(function() {
-      if (!isOpen) greeting.classList.add('show');
-    }, 2000);
+      // 1. DOM 结构创建
+      var btn = document.createElement('div');
+      btn.id = 'chat-widget-btn';
+      btn.innerHTML = '<svg class="icon-chat" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2-2z"/></svg><svg class="icon-close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>';
+
+      var container = document.createElement('div');
+      container.id = 'chat-widget-container';
+      container.style.width = savedWidth;
+      container.style.height = savedHeight;
+
+      var overlay = document.createElement('div'); // 拖拽时的遮罩层
+      overlay.id = 'chat-widget-overlay';
+
+      var resizeHandle = document.createElement('div');
+      resizeHandle.id = 'chat-widget-resize-handle';
+      resizeHandle.title = "Drag to resize";
+
+      var frame = document.createElement('iframe');
+      frame.id = 'chat-widget-frame';
+      frame.src = buildIframeSrc(); // pass uid + cid as URL params
+      frame.allow = "microphone; camera; display-capture";
+
+      var closeTop = document.createElement('div');
+      closeTop.id = 'chat-widget-close-top';
+      closeTop.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>';
+
+      container.appendChild(resizeHandle);
+      container.appendChild(overlay);
+      container.appendChild(frame);
+      container.appendChild(closeTop);
+
+      var greeting = document.createElement('div');
+      greeting.id = 'chat-widget-greeting';
+      greeting.innerHTML = 'Chat with Tow Bot<button class="greeting-close"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>';
+
+      // 2. 交互逻辑
+      function toggleChat(state) {
+        isOpen = state;
+        if (isOpen) {
+          btn.classList.add('open');
+          container.classList.add('open');
+          greeting.classList.remove('show');
+        } else {
+          btn.classList.remove('open');
+          container.classList.remove('open');
+        }
+      }
+
+      btn.onclick = function() { toggleChat(!isOpen); };
+      closeTop.onclick = function() { toggleChat(false); };
+      greeting.onclick = function() { toggleChat(true); };
+
+      var greetingClose = greeting.querySelector('.greeting-close');
+      if(greetingClose) {
+          greetingClose.onclick = function(e) {
+              e.stopPropagation();
+              greeting.classList.remove('show');
+          };
+      }
+
+      // Save conversationId posted back from the iframe (1st-party storage)
+      window.addEventListener('message', function(e) {
+        if (e.data && e.data.type === 'TOW_BOT_SESSION') {
+          localStorage.setItem(STORAGE_KEY_CONV, e.data.conversationId);
+        }
+      });
+
+      // 3. 拖拽调整大小逻辑
+      var isResizing = false;
+      var startX, startY, startWidth, startHeight;
+
+      resizeHandle.addEventListener('mousedown', function(e) {
+        e.preventDefault();
+        isResizing = true;
+        container.classList.add('resizing'); // 禁用动画，显示遮罩
+
+        startX = e.clientX;
+        startY = e.clientY;
+        startWidth = parseInt(document.defaultView.getComputedStyle(container).width, 10);
+        startHeight = parseInt(document.defaultView.getComputedStyle(container).height, 10);
+
+        document.addEventListener('mousemove', doDrag);
+        document.addEventListener('mouseup', stopDrag);
+      });
+
+      function doDrag(e) {
+        if (!isResizing) return;
+        // 核心计算：鼠标向左移(x减小)，宽度增加；鼠标向上移(y减小)，高度增加
+        var newWidth = startWidth + (startX - e.clientX);
+        var newHeight = startHeight + (startY - e.clientY);
+
+        // 设置新尺寸
+        container.style.width = newWidth + 'px';
+        container.style.height = newHeight + 'px';
+      }
+
+      function stopDrag() {
+        if (!isResizing) return;
+        isResizing = false;
+        container.classList.remove('resizing');
+        document.removeEventListener('mousemove', doDrag);
+        document.removeEventListener('mouseup', stopDrag);
+
+        // 记忆尺寸
+        localStorage.setItem(STORAGE_KEY_WIDTH, container.style.width);
+        localStorage.setItem(STORAGE_KEY_HEIGHT, container.style.height);
+      }
+
+      document.body.appendChild(container);
+      document.body.appendChild(greeting);
+      document.body.appendChild(btn);
+
+      setTimeout(function() {
+        if (!isOpen) greeting.classList.add('show');
+      }, 2000);
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', createWidget);
+    } else {
+      createWidget();
+    }
   })();
   </script>
 </body>
