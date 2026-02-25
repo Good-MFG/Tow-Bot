@@ -3,7 +3,8 @@ const form = document.getElementById('chat-form');
 const input = document.getElementById('user-input');
 const sendBtn = document.getElementById('send-btn');
 
-let conversationId = localStorage.getItem('tow_bot_conversation_id') || null;
+const _urlParams = new URLSearchParams(window.location.search);
+let conversationId = _urlParams.get('cid') || null;
 let isStreaming = false;
 
 function renderMarkdown(text) {
@@ -45,12 +46,7 @@ function renderMarkdown(text) {
 }
 
 function getUserId() {
-  let id = localStorage.getItem('tow_bot_user_id');
-  if (!id) {
-    id = 'user_' + Math.random().toString(36).substring(2, 15);
-    localStorage.setItem('tow_bot_user_id', id);
-  }
-  return id;
+  return _urlParams.get('uid') || 'anonymous';
 }
 
 function scrollToBottom() {
@@ -139,7 +135,7 @@ async function sendMessage(query) {
 
           if (data.conversation_id && !conversationId) {
             conversationId = data.conversation_id;
-            localStorage.setItem('tow_bot_conversation_id', conversationId);
+            window.parent.postMessage({ type: 'TOW_BOT_SESSION', conversationId }, '*');
           }
 
           if (data.answer !== undefined) {
@@ -165,7 +161,7 @@ async function sendMessage(query) {
           const data = JSON.parse(jsonStr);
           if (data.conversation_id && !conversationId) {
             conversationId = data.conversation_id;
-            localStorage.setItem('tow_bot_conversation_id', conversationId);
+            window.parent.postMessage({ type: 'TOW_BOT_SESSION', conversationId }, '*');
           }
           if (data.answer !== undefined) {
             if (!loadingCleared) {
