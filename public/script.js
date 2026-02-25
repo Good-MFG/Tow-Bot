@@ -195,6 +195,29 @@ form.addEventListener('submit', (e) => {
   sendMessage(input.value);
 });
 
+function newConversation() {
+  if (isStreaming) return;
+
+  // Reset conversation state
+  conversationId = null;
+
+  // Tell the parent page to clear the stored conversation ID
+  window.parent.postMessage({ type: 'TOW_BOT_NEW_CONVERSATION' }, '*');
+
+  // Clear messages and restore welcome screen
+  messagesEl.innerHTML = `
+    <div id="welcome">
+      <img class="welcome-logo" src="Tow-Bot-logo.jpg" alt="Tow Bot">
+      <h2>Welcome to Tow Bot</h2>
+      <p>Ask me anything about Good MFG products and services.</p>
+    </div>`;
+
+  input.value = '';
+  input.focus();
+}
+
+document.getElementById('new-chat-btn').addEventListener('click', newConversation);
+
 async function loadHistory() {
   const cid = _urlParams.get('cid');
   if (!cid) return;

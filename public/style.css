@@ -35,6 +35,31 @@ html, body {
   margin: 0 auto;
 }
 
+#new-chat-btn {
+  margin-left: auto;
+  background: none;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 6px 8px;
+  cursor: pointer;
+  color: #6b7280;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.15s, color 0.15s;
+}
+
+#new-chat-btn:hover {
+  background: #f3f4f6;
+  color: #09843B;
+  border-color: #09843B;
+}
+
+#new-chat-btn svg {
+  width: 16px;
+  height: 16px;
+}
+
 .avatar {
   height: 36px;
   flex-shrink: 0;

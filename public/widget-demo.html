@@ -262,6 +262,9 @@
         if (e.data && e.data.type === 'TOW_BOT_SESSION') {
           localStorage.setItem(STORAGE_KEY_CONV, e.data.conversationId);
         }
+        if (e.data && e.data.type === 'TOW_BOT_NEW_CONVERSATION') {
+          localStorage.removeItem(STORAGE_KEY_CONV);
+        }
       });
 
       // 3. 拖拽调整大小逻辑
