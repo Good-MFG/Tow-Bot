@@ -305,15 +305,15 @@
         localStorage.setItem(STORAGE_KEY_HEIGHT, container.style.height);
       }
 
-      document.body.appendChild(container);
-      document.body.appendChild(greeting);
-      document.body.appendChild(btn);
-
-      // Restore open state from previous page
+      // Apply open state BEFORE inserting into DOM so no CSS transition fires
       if (isOpen) {
         btn.classList.add('open');
         container.classList.add('open');
       }
+
+      document.body.appendChild(container);
+      document.body.appendChild(greeting);
+      document.body.appendChild(btn);
 
       setTimeout(function() {
         if (!isOpen) greeting.classList.add('show');
