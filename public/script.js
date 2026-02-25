@@ -3,7 +3,7 @@ const form = document.getElementById('chat-form');
 const input = document.getElementById('user-input');
 const sendBtn = document.getElementById('send-btn');
 
-let conversationId = null;
+let conversationId = localStorage.getItem('tow_bot_conversation_id') || null;
 let isStreaming = false;
 
 function renderMarkdown(text) {
@@ -45,10 +45,10 @@ function renderMarkdown(text) {
 }
 
 function getUserId() {
-  let id = sessionStorage.getItem('chat_user_id');
+  let id = localStorage.getItem('tow_bot_user_id');
   if (!id) {
     id = 'user_' + Math.random().toString(36).substring(2, 15);
-    sessionStorage.setItem('chat_user_id', id);
+    localStorage.setItem('tow_bot_user_id', id);
   }
   return id;
 }
@@ -139,6 +139,7 @@ async function sendMessage(query) {
 
           if (data.conversation_id && !conversationId) {
             conversationId = data.conversation_id;
+            localStorage.setItem('tow_bot_conversation_id', conversationId);
           }
 
           if (data.answer !== undefined) {
@@ -164,6 +165,7 @@ async function sendMessage(query) {
           const data = JSON.parse(jsonStr);
           if (data.conversation_id && !conversationId) {
             conversationId = data.conversation_id;
+            localStorage.setItem('tow_bot_conversation_id', conversationId);
           }
           if (data.answer !== undefined) {
             if (!loadingCleared) {
