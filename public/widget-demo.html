@@ -167,6 +167,7 @@
     var STORAGE_KEY_HEIGHT = 'tow_bot_height';
     var STORAGE_KEY_CONV   = 'tow_bot_conversation_id'; // stored on parent page (1st-party)
     var STORAGE_KEY_USER   = 'tow_bot_user_id';          // stored on parent page (1st-party)
+    var STORAGE_KEY_OPEN   = 'tow_bot_is_open';          // remember open/closed state
 
     // Build iframe URL with session params so the bot can resume the conversation
     function getOrCreateUserId() {
@@ -189,7 +190,7 @@
     function createWidget() {
       if (document.getElementById('chat-widget-btn')) return;
 
-      var isOpen = false;
+      var isOpen = localStorage.getItem(STORAGE_KEY_OPEN) === '1';
 
       // 恢复用户上次设置的大小
       var savedWidth = localStorage.getItem(STORAGE_KEY_WIDTH) || '400px';
@@ -233,6 +234,7 @@
       // 2. 交互逻辑
       function toggleChat(state) {
         isOpen = state;
+        localStorage.setItem(STORAGE_KEY_OPEN, isOpen ? '1' : '0');
         if (isOpen) {
           btn.classList.add('open');
           container.classList.add('open');
@@ -306,6 +308,12 @@
       document.body.appendChild(container);
       document.body.appendChild(greeting);
       document.body.appendChild(btn);
+
+      // Restore open state from previous page
+      if (isOpen) {
+        btn.classList.add('open');
+        container.classList.add('open');
+      }
 
       setTimeout(function() {
         if (!isOpen) greeting.classList.add('show');

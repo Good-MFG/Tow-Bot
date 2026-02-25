@@ -194,3 +194,37 @@ form.addEventListener('submit', (e) => {
   e.preventDefault();
   sendMessage(input.value);
 });
+
+async function loadHistory() {
+  const cid = _urlParams.get('cid');
+  if (!cid) return;
+
+  try {
+    const res = await fetch(
+      `/api/messages?conversation_id=${encodeURIComponent(cid)}&user=${encodeURIComponent(getUserId())}`
+    );
+    if (!res.ok) return;
+
+    const data = await res.json();
+    if (!data.data || !data.data.length) return;
+
+    // Remove welcome screen
+    const welcome = document.getElementById('welcome');
+    if (welcome) welcome.remove();
+
+    // Dify returns newest-first; reverse for chronological display
+    const messages = data.data.slice().reverse();
+    for (const msg of messages) {
+      if (msg.query) addMessage(msg.query, 'user');
+      if (msg.answer) {
+        const div = addMessage('', 'ai');
+        div.innerHTML = renderMarkdown(msg.answer);
+      }
+    }
+    scrollToBottom();
+  } catch (err) {
+    // History load is non-critical — fail silently
+  }
+}
+
+loadHistory();
