@@ -2,24 +2,24 @@
   /* --- 基础样式 --- */
   #chat-widget-btn {
     position: fixed; bottom: 24px; right: 24px; width: 60px; height: 60px;
-    /* CHANGED: Updated to Teal #a6d5d6 */
-    background: #a6d5d6;
+    /* CHANGED: Updated to Teal #35a5a7 */
+    background: #35a5a7;
     /* Optional: If you want a gradient like before, use this instead: */
-    /* background: linear-gradient(135deg, #a6d5d6, #8cc4c5); */
+    /* background: linear-gradient(135deg, #35a5a7, #2c8a8c); */
 
     border-radius: 50%;
     display: flex; align-items: center; justify-content: center; cursor: pointer;
     z-index: 999999;
 
-    /* CHANGED: Updated shadow color to teal rgba(166, 213, 214...) */
-    box-shadow: 0 4px 16px rgba(166, 213, 214, 0.5);
+    /* CHANGED: Updated shadow color to teal rgba(53, 165, 167...) */
+    box-shadow: 0 4px 16px rgba(53, 165, 167, 0.5);
     
     transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.25s ease;
   }
   #chat-widget-btn:hover { 
       transform: scale(1.1); 
       /* CHANGED: Updated hover shadow to teal */
-      box-shadow: 0 6px 24px rgba(166, 213, 214, 0.6);
+      box-shadow: 0 6px 24px rgba(53, 165, 167, 0.6);
   }
   #chat-widget-btn svg { width: 28px; height: 28px; color: #fff; transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.2s ease; }
    
@@ -69,7 +69,7 @@
     border-top-left-radius: 2px; transition: border-color 0.2s;
   }
   /* CHANGED: Updated resize handle hover color to match green theme */
-  #chat-widget-resize-handle:hover::after { border-color: #a6d5d6; }
+  #chat-widget-resize-handle:hover::after { border-color: #35a5a7; }
 
   /* --- 拖拽时的覆盖层 (防止 iframe 捕获鼠标事件) --- */
   #chat-widget-overlay { display: none; position: absolute; top: 0; left: 0; right: 0; bottom: 0; z-index: 1; }

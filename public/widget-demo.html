@@ -51,12 +51,12 @@
   /* --- 1. 聊天主按钮 --- */
   #chat-widget-btn {
     position: fixed; bottom: 24px; right: 24px; width: 60px; height: 60px;
-    background: #a6d5d6; border-radius: 50%;
+    background: #35a5a7; border-radius: 50%;
     display: flex; align-items: center; justify-content: center; cursor: pointer;
-    z-index: 2147483647; box-shadow: 0 4px 16px rgba(166, 213, 214, 0.5);
+    z-index: 2147483647; box-shadow: 0 4px 16px rgba(53, 165, 167, 0.5);
     transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.25s ease;
   }
-  #chat-widget-btn:hover { transform: scale(1.1); box-shadow: 0 6px 24px rgba(166, 213, 214, 0.6); }
+  #chat-widget-btn:hover { transform: scale(1.1); box-shadow: 0 6px 24px rgba(53, 165, 167, 0.6); }
   #chat-widget-btn svg { width: 28px; height: 28px; color: #fff; transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.2s ease; }
   #chat-widget-btn.open svg.icon-chat { transform: rotate(90deg) scale(0); opacity: 0; }
   #chat-widget-btn.open svg.icon-close { transform: rotate(0deg) scale(1); opacity: 1; }
@@ -125,7 +125,7 @@
     border-top-left-radius: 2px;
     transition: border-color 0.2s;
   }
-  #chat-widget-resize-handle:hover::after { border-color: #a6d5d6; }
+  #chat-widget-resize-handle:hover::after { border-color: #35a5a7; }
 
   /* --- 5. 覆盖层 (拖拽时防止iframe捕获鼠标) --- */
   #chat-widget-overlay {
