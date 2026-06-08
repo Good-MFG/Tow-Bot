@@ -69,7 +69,7 @@
     border-top-left-radius: 2px; transition: border-color 0.2s;
   }
   /* CHANGED: Updated resize handle hover color to match green theme */
-  #chat-widget-resize-handle:hover::after { border-color: #09843B; }
+  #chat-widget-resize-handle:hover::after { border-color: #a6d5d6; }
 
   /* --- 拖拽时的覆盖层 (防止 iframe 捕获鼠标事件) --- */
   #chat-widget-overlay { display: none; position: absolute; top: 0; left: 0; right: 0; bottom: 0; z-index: 1; }

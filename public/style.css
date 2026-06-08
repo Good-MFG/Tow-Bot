@@ -51,8 +51,8 @@ html, body {
 
 #new-chat-btn:hover {
   background: #f3f4f6;
-  color: #09843B;
-  border-color: #09843B;
+  color: #a6d5d6;
+  border-color: #a6d5d6;
 }
 
 #new-chat-btn svg {
@@ -150,7 +150,7 @@ html, body {
 
 .message.user {
   align-self: flex-end;
-  background: #09843B;
+  background: #a6d5d6;
   color: #fff;
   border-bottom-right-radius: 4px;
   white-space: pre-wrap;
@@ -238,7 +238,7 @@ html, body {
 }
 
 #user-input:focus {
-  border-color: #09843B;
+  border-color: #a6d5d6;
 }
 
 #user-input:disabled {
@@ -251,7 +251,7 @@ html, body {
   height: 40px;
   border: none;
   border-radius: 50%;
-  background: #09843B;
+  background: #a6d5d6;
   color: #fff;
   cursor: pointer;
   display: flex;
@@ -262,11 +262,11 @@ html, body {
 }
 
 #send-btn:hover {
-  background: #076b2f;
+  background: #8cc4c5;
 }
 
 #send-btn:disabled {
-  background: #7bbf9a;
+  background: #cfe6e7;
   cursor: not-allowed;
 }
 
